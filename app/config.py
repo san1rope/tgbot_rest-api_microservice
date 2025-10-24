@@ -14,4 +14,4 @@ class Config:
     LOGGER: Optional[Logger] = None
 
     REST_API_TOKEN: str = os.getenv("REST_API_TOKEN").strip()
-    KAFKA_IP: str = os.getenv("KAFKA_IP").strip()
+    KAFKA_BOOTSTRAP_IP: str = os.getenv("KAFKA_BOOTSTRAP_IP").strip()

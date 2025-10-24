@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -66,8 +68,8 @@ class MediaInfo(BaseModel):
 
 class ResponseData(BaseModel):
     status: str
-    error: str
-    code: str
+    error: Optional[str]
+    code: Optional[str]
 
 
 class SendMessageRequest(BaseModel):

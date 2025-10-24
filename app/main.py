@@ -4,6 +4,7 @@ from fastapi import FastAPI, Header, Request
 from fastapi.responses import JSONResponse
 
 from app.api_models import *
+from app.kafka import KafkaInterface
 from app.utils import Utils as Ut
 
 rest_app = FastAPI()
@@ -25,15 +26,24 @@ async def api_error_handler(request: Request, exc: APIError):
 async def send_message(body: SendMessageRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    pass  # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
+    if result.get("error"):
+        res_data = ResponseData(
+            status=Ut.STATUS_FAIL,
+            error=result.get("error"),
+            code="TEST"
+        )
 
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
+    else:
+        res_data = ResponseData(
             status=Ut.STATUS_SUCCESS,
             error=None,
             code=None
         )
+
+    return JSONResponse(
+        status_code=HTTPStatus.OK,
+        content=res_data
     )
 
 
@@ -44,7 +54,7 @@ async def edit_message(message_id: int, body: EditMessageRequest, authorization:
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    pass  # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -63,7 +73,7 @@ async def delete_message(message_id: int, body: DeleteMessageRequest, authorizat
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    pass  # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -82,7 +92,7 @@ async def message_pin(message_id: int, body: MessagePinRequest, authorization: s
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    pass  # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -101,7 +111,7 @@ async def message_unpin(message_id: int, body: MessageUnpinRequest, authorizatio
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    pass  # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -117,7 +127,7 @@ async def message_unpin(message_id: int, body: MessageUnpinRequest, authorizatio
 async def send_photo(body: SendPhotoRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    pass  # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -133,7 +143,7 @@ async def send_photo(body: SendPhotoRequest, authorization: str = Header(None)):
 async def send_video(body: SendVideoRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    pass  # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -149,7 +159,7 @@ async def send_video(body: SendVideoRequest, authorization: str = Header(None)):
 async def send_audio(body: SendAudioRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -165,7 +175,7 @@ async def send_audio(body: SendAudioRequest, authorization: str = Header(None)):
 async def send_document(body: SendDocumentRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -181,7 +191,7 @@ async def send_document(body: SendDocumentRequest, authorization: str = Header(N
 async def send_sticker(body: SendStickerRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -197,7 +207,7 @@ async def send_sticker(body: SendStickerRequest, authorization: str = Header(Non
 async def send_voice(body: SendVoiceRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -213,7 +223,7 @@ async def send_voice(body: SendVoiceRequest, authorization: str = Header(None)):
 async def send_gif(body: SendGIFRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -229,7 +239,7 @@ async def send_gif(body: SendGIFRequest, authorization: str = Header(None)):
 async def create_topic(body: CreateTopicRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -247,7 +257,7 @@ async def edit_topic(topic_id: int, body: EditTopicRequest, authorization: str =
     if topic_id == body.topic_id:
         raise APIError("topic_id in path and body do not match", "TOPIC_ID_MISMATCH", status_code=400)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
@@ -266,7 +276,7 @@ async def delete_topic(topic_id: int, body: DeleteMessageRequest, authorization:
     if topic_id == body.topic_id:
         raise APIError("topic_id in path and body do not match", "TOPIC_ID_MISMATCH", status_code=400)
 
-    # do
+    result = await KafkaInterface().send_message(payload=body.model_dump())
 
     return JSONResponse(
         status_code=HTTPStatus.OK,
