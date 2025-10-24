@@ -12,3 +12,6 @@ class Config:
     DATETIME_FORMAT = os.getenv("DATETIME_FORMAT").strip()
     LOGGING_DIR = Path(os.path.abspath("logs"))
     LOGGER: Optional[Logger] = None
+
+    REST_API_TOKEN: str = os.getenv("REST_API_TOKEN").strip()
+    KAFKA_IP: str = os.getenv("KAFKA_IP").strip()
