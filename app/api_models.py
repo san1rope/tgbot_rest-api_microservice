@@ -68,6 +68,7 @@ class MediaInfo(BaseModel):
 
 class ResponseData(BaseModel):
     status: str
+    id: Optional[str]
     error: Optional[str]
     code: Optional[str]
 

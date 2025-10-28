@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import FastAPI, Header, Request
+from fastapi import FastAPI, Header, Request, Depends
 from fastapi.responses import JSONResponse
 
 from app.api_models import *
@@ -23,28 +23,12 @@ async def api_error_handler(request: Request, exc: APIError):
 
 
 @rest_app.post("/api/v1/messages/send", response_model=SendMessageRequest)
-async def send_message(body: SendMessageRequest, authorization: str = Header(None)):
+async def send_message(body: SendMessageRequest, authorization: str = Header(...)):
+    print(f"auth = {authorization}")
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-    if result.get("error"):
-        res_data = ResponseData(
-            status=Ut.STATUS_FAIL,
-            error=result.get("error"),
-            code="TEST"
-        )
-
-    else:
-        res_data = ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=res_data
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.put("/api/v1/messages/{message_id}/edit", response_model=EditMessageRequest)
@@ -55,15 +39,7 @@ async def edit_message(message_id: int, body: EditMessageRequest, authorization:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.delete("/api/v1/messages/{message_id}", response_model=DeleteMessageRequest)
@@ -74,15 +50,7 @@ async def delete_message(message_id: int, body: DeleteMessageRequest, authorizat
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/{message_id}/pin", response_model=MessagePinRequest)
@@ -93,15 +61,7 @@ async def message_pin(message_id: int, body: MessagePinRequest, authorization: s
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/{message_id}/unpin", response_model=MessageUnpinRequest)
@@ -112,15 +72,7 @@ async def message_unpin(message_id: int, body: MessageUnpinRequest, authorizatio
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/send_photo", response_model=SendPhotoRequest)
@@ -128,15 +80,7 @@ async def send_photo(body: SendPhotoRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/send_video", response_model=SendVideoRequest)
@@ -144,15 +88,7 @@ async def send_video(body: SendVideoRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/send_audio", response_model=SendAudioRequest)
@@ -160,15 +96,7 @@ async def send_audio(body: SendAudioRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/send_document", response_model=SendDocumentRequest)
@@ -176,15 +104,7 @@ async def send_document(body: SendDocumentRequest, authorization: str = Header(N
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/send_sticker", response_model=SendStickerRequest)
@@ -192,15 +112,7 @@ async def send_sticker(body: SendStickerRequest, authorization: str = Header(Non
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/send_voice", response_model=SendVoiceRequest)
@@ -208,15 +120,7 @@ async def send_voice(body: SendVoiceRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/messages/send_gif", response_model=SendGIFRequest)
@@ -224,15 +128,7 @@ async def send_gif(body: SendGIFRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.post("/api/v1/topics/create", response_model=CreateTopicRequest)
@@ -240,15 +136,8 @@ async def create_topic(body: CreateTopicRequest, authorization: str = Header(Non
     await Ut.check_auth(authorization)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
 
 @rest_app.put("/api/v1/topics/{topic_id}/edit", response_model=EditTopicRequest)
 async def edit_topic(topic_id: int, body: EditTopicRequest, authorization: str = Header(None)):
@@ -258,15 +147,7 @@ async def edit_topic(topic_id: int, body: EditTopicRequest, authorization: str =
         raise APIError("topic_id in path and body do not match", "TOPIC_ID_MISMATCH", status_code=400)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.delete("/api/v1/topics/{topic_id}", response_model=DeleteTopicRequest)
@@ -277,15 +158,7 @@ async def delete_topic(topic_id: int, body: DeleteMessageRequest, authorization:
         raise APIError("topic_id in path and body do not match", "TOPIC_ID_MISMATCH", status_code=400)
 
     result = await KafkaInterface().send_message(payload=body.model_dump())
-
-    return JSONResponse(
-        status_code=HTTPStatus.OK,
-        content=ResponseData(
-            status=Ut.STATUS_SUCCESS,
-            error=None,
-            code=None
-        )
-    )
+    return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.get("/api/v1/media/{chat_id}/{message_id}/info")

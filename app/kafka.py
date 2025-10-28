@@ -2,8 +2,10 @@ import json
 import os
 import uuid
 from typing import Dict
+from http import HTTPStatus
 
 from confluent_kafka import Producer
+from fastapi.responses import JSONResponse
 
 from app.api_models import ResponseData
 from app.config import Config
@@ -48,17 +50,13 @@ class KafkaInterface:
         return result
 
     @staticmethod
-    async def response_from_kafka_result(result: Dict):
+    async def response_from_kafka_result(result: Dict) -> JSONResponse:
         if result.get("error"):
-            res_data = ResponseData(
-                status=Ut.STATUS_FAIL,
-                error=result.get("error"),
-                code="TEST"
-            )
+            res_data = ResponseData(status=Ut.STATUS_FAIL, id=None, error=result.get("error"), code="TEST")
+            status_code = HTTPStatus.INTERNAL_SERVER_ERROR
 
         else:
-            res_data = ResponseData(
-                status=Ut.STATUS_SUCCESS,
-                error=None,
-                code=None
-            )
+            res_data = ResponseData(status=Ut.STATUS_SUCCESS, id=result["message_id"], error=None, code=None)
+            status_code = HTTPStatus.OK
+
+        return JSONResponse(status_code=status_code, content=res_data.model_dump())
