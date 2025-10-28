@@ -24,10 +24,9 @@ async def api_error_handler(request: Request, exc: APIError):
 
 @rest_app.post("/api/v1/messages/send", response_model=SendMessageRequest)
 async def send_message(body: SendMessageRequest, authorization: str = Header(...)):
-    print(f"auth = {authorization}")
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 

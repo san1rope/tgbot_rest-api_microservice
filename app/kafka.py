@@ -7,7 +7,7 @@ from http import HTTPStatus
 from confluent_kafka import Producer
 from fastapi.responses import JSONResponse
 
-from app.api_models import ResponseData
+from app.api_models import *
 from app.config import Config
 from app.utils import Utils as Ut
 
@@ -21,10 +21,62 @@ class KafkaInterface:
         "max.in.flight.requests.per.connection": 5,
     })
 
+    @staticmethod
+    async def get_request_type(payload) -> str:
+        if isinstance(payload, SendMessageRequest):
+            return "send_message"
+
+        elif isinstance(payload, EditMessageRequest):
+            return "edit_message"
+
+        elif isinstance(payload, DeleteMessageRequest):
+            return "delete_message"
+
+        elif isinstance(payload, MessagePinRequest):
+            return "message_pin"
+
+        elif isinstance(payload, MessageUnpinRequest):
+            return "message_unpin"
+
+        elif isinstance(payload, SendPhotoRequest):
+            return "send_photo"
+
+        elif isinstance(payload, SendVideoRequest):
+            return "send_video"
+
+        elif isinstance(payload, SendAudioRequest):
+            return "send_audio"
+
+        elif isinstance(payload, SendDocumentRequest):
+            return "send_document"
+
+        elif isinstance(payload, SendStickerRequest):
+            return "send_sticker"
+
+        elif isinstance(payload, SendVoiceRequest):
+            return "send_voice"
+
+        elif isinstance(payload, SendGIFRequest):
+            return "send_gif"
+
+        elif isinstance(payload, CreateTopicRequest):
+            return "create_topic"
+
+        elif isinstance(payload, EditTopicRequest):
+            return "edit_topic"
+
+        elif isinstance(payload, DeleteMessageRequest):
+            return "delete_topic"
+
+        else:
+            return "None"
+
     @classmethod
-    async def send_message(cls, payload: dict, topic: str = "messages") -> dict:
+    async def send_message(cls, payload, topic: str = "messages") -> dict:
+        request_type = await cls.get_request_type(payload)
         msg_id = str(uuid.uuid4())
-        payload["message_id"] = msg_id
+        payload["request_id"] = msg_id
+        payload["request_type"] = request_type
 
         result = {}
 

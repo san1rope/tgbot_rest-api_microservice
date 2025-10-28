@@ -82,13 +82,6 @@ class SendMessageRequest(BaseModel):
     reply_to_message_id: int
 
 
-# class SendMessageResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-
-
 class EditMessageRequest(BaseModel):
     chat_id: int
     message_id: int
@@ -96,24 +89,9 @@ class EditMessageRequest(BaseModel):
     parse_mode: str
 
 
-# class EditMessageResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     updated_at: str
-#     text: str
-
-
 class DeleteMessageRequest(BaseModel):
     chat_id: int
     message_id: int
-
-
-# class DeleteMessageResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     deleted_at: str
 
 
 class MessagePinRequest(BaseModel):
@@ -121,25 +99,9 @@ class MessagePinRequest(BaseModel):
     message_id: int
 
 
-# class MessagePinResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     pinned_at: str
-#     is_pinned: bool
-
-
 class MessageUnpinRequest(BaseModel):
     chat_id: int
     message_id: int
-
-
-# class MessageUnpinResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     unpinned_at: str
-#     is_pinned: bool
 
 
 class SendPhotoRequest(BaseModel):
@@ -150,28 +112,12 @@ class SendPhotoRequest(BaseModel):
     parse_mode: str
 
 
-# class SendPhotoResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-#     photo: PhotoData
-
-
 class SendVideoRequest(BaseModel):
     chat_id: int
     video: str
     caption: str
     topic_id: int
     parse_mode: str
-
-
-# class SendVideoResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-#     video: VideoData
 
 
 class SendAudioRequest(BaseModel):
@@ -182,14 +128,6 @@ class SendAudioRequest(BaseModel):
     parse_mode: str
 
 
-# class SendAudioResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-#     audio: AudioData
-
-
 class SendDocumentRequest(BaseModel):
     chat_id: int
     document: str
@@ -198,26 +136,10 @@ class SendDocumentRequest(BaseModel):
     parse_mode: str
 
 
-# class SendDocumentResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-#     document: DocumentData
-
-
 class SendStickerRequest(BaseModel):
     chat_id: int
     sticker: str
     topic_id: int
-
-
-# class SendStickerResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-#     sticker: StickerData
 
 
 class SendVoiceRequest(BaseModel):
@@ -225,14 +147,6 @@ class SendVoiceRequest(BaseModel):
     voice: str
     caption: str
     topic_id: int
-
-
-# class SendVoiceResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-#     voice: VoiceData
 
 
 class SendGIFRequest(BaseModel):
@@ -243,27 +157,10 @@ class SendGIFRequest(BaseModel):
     parse_mode: str
 
 
-# class SendGIFResponse(BaseModel):
-#     status: str
-#     message_id: int
-#     chat_id: int
-#     sent_at: str
-#     gif: GIFData
-
-
 class CreateTopicRequest(BaseModel):
     chat_id: int
     title: str
     icon_color: int
-
-
-# class CreateTopicResponse(BaseModel):
-#     status: str
-#     topic_id: int
-#     chat_id: int
-#     title: str
-#     icon_color: int
-#     created_at: str
 
 
 class EditTopicRequest(BaseModel):
@@ -272,24 +169,9 @@ class EditTopicRequest(BaseModel):
     title: str
 
 
-# class EditTopicResponse(BaseModel):
-#     status: str
-#     topic_id: int
-#     chat_id: int
-#     title: str
-#     updated_at: str
-
-
 class DeleteTopicRequest(BaseModel):
     chat_id: int
     topic_id: int
-
-
-# class DeleteTopicResponse(BaseModel):
-#     status: str
-#     topic_id: int
-#     chat_id: int
-#     deleted_at: str
 
 
 class MediaFileInfoResponse(BaseModel):
