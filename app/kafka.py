@@ -75,6 +75,8 @@ class KafkaInterface:
     async def send_message(cls, payload, topic: str = "messages") -> dict:
         request_type = await cls.get_request_type(payload)
         msg_id = str(uuid.uuid4())
+
+        payload = payload.model_dump()
         payload["request_id"] = msg_id
         payload["request_type"] = request_type
 
