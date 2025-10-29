@@ -76,10 +76,10 @@ class ResponseData(BaseModel):
 class SendMessageRequest(BaseModel):
     chat_id: int
     text: str
-    topic_id: int
-    parse_mode: str
-    disable_notification: bool
-    reply_to_message_id: int
+    topic_id: Optional[int] = None
+    parse_mode: str = "markdown"
+    disable_notification: bool = False
+    reply_to_message_id: Optional[int] = None
 
 
 class EditMessageRequest(BaseModel):
