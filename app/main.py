@@ -1,13 +1,31 @@
+import logging
+from contextlib import asynccontextmanager
 from http import HTTPStatus
+from datetime import datetime
 
 from fastapi import FastAPI, Header, Request, Depends
 from fastapi.responses import JSONResponse
 
 from app.api_models import *
+from app.config import Config
 from app.kafka import KafkaInterface
 from app.utils import Utils as Ut
 
-rest_app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    datetime_of_start = datetime.now().strftime(Config.DATETIME_FORMAT)
+    logger = await Ut.add_logging(datetime_of_start=datetime_of_start, process_id=0)
+    Config.LOGGER = logger
+
+    await KafkaInterface().initialize()
+
+    yield
+
+    await KafkaInterface.stop()
+
+
+rest_app = FastAPI(lifespan=lifespan)
 
 
 @rest_app.exception_handler(APIError)
