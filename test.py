@@ -143,5 +143,59 @@ async def delete_topic():
             print(answer)
 
 
+async def send_photo():
+    url = "http://127.0.0.1:8000/api/v1/messages/send_photo"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "photo": "https://static-cse.canva.com/blob/847132/paulskorupskas7KLaxLbSXAunsplash2.jpg",
+        "caption": "my_caption",
+    }
+
+    async with ClientSession() as session:
+        async with session.post(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def send_video():
+    url = "http://127.0.0.1:8000/api/v1/messages/send_video"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "video": "C:/Users/valet/OneDrive/Рабочий стол/video_2026-01-19_14-49-54.mp4",
+        "caption": "my_caption",
+    }
+
+    async with ClientSession() as session:
+        async with session.post(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def send_document():
+    url = "http://127.0.0.1:8000/api/v1/messages/send_document"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "document": "C:/Users/valet/OneDrive/Рабочий стол/video_2026-01-19_14-49-54.mp4",
+        "caption": "my_caption",
+    }
+
+    async with ClientSession() as session:
+        async with session.post(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
 if __name__ == '__main__':
-    asyncio.run(delete_topic())
+    asyncio.run(send_video())
