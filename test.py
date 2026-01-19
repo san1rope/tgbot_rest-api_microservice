@@ -7,12 +7,12 @@ async def main():
     url = "http://127.0.0.1:8000/api/v1/messages/send"
     headers = {
         "Content-Type": "application/json",
-        "authorization": "Bearer 89e69246a5a69a8eccda9b3945457409733014f7a8a53d48b0d4b283620202ff"
+        "authorization": "Bearer 21jk3h12kj3h"
     }
     data = {
-        "chat_id": -1003236713326,
-        "text": "hahahura",
-        "topic_id": None,
+        "chat_id": -1003514949333,
+        "text": "message to topic",
+        "topic_id": 2,
         "parse_mode": "markdown",
         "disable_notification": False,
         "reply_to_message_id": None
