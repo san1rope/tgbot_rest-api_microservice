@@ -51,10 +51,12 @@ class KafkaInterface:
             SendGIFRequest: "send_gif",
             CreateTopicRequest: "create_topic",
             EditTopicRequest: "edit_topic",
+            DeleteTopicRequest: "delete_topic"
         }
 
         for model, req_type in mapping.items():
             if isinstance(payload, model):
+                print(f"req_type = {req_type}; payload = {payload}")
                 return req_type
 
         return "None"

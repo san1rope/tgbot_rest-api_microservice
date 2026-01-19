@@ -56,7 +56,7 @@ async def edit_message(message_id: int, body: EditMessageRequest, authorization:
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -67,7 +67,7 @@ async def delete_message(message_id: int, body: DeleteMessageRequest, authorizat
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -78,7 +78,7 @@ async def message_pin(message_id: int, body: MessagePinRequest, authorization: s
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -89,7 +89,7 @@ async def message_unpin(message_id: int, body: MessageUnpinRequest, authorizatio
     if message_id != body.message_id:
         raise APIError("message_id in path and body do not match", "MESSAGE_ID_MISMATCH", status_code=400)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -97,7 +97,7 @@ async def message_unpin(message_id: int, body: MessageUnpinRequest, authorizatio
 async def send_photo(body: SendPhotoRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -105,7 +105,7 @@ async def send_photo(body: SendPhotoRequest, authorization: str = Header(None)):
 async def send_video(body: SendVideoRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -113,7 +113,7 @@ async def send_video(body: SendVideoRequest, authorization: str = Header(None)):
 async def send_audio(body: SendAudioRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -121,7 +121,7 @@ async def send_audio(body: SendAudioRequest, authorization: str = Header(None)):
 async def send_document(body: SendDocumentRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -129,7 +129,7 @@ async def send_document(body: SendDocumentRequest, authorization: str = Header(N
 async def send_sticker(body: SendStickerRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -137,7 +137,7 @@ async def send_sticker(body: SendStickerRequest, authorization: str = Header(Non
 async def send_voice(body: SendVoiceRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -145,7 +145,7 @@ async def send_voice(body: SendVoiceRequest, authorization: str = Header(None)):
 async def send_gif(body: SendGIFRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -153,7 +153,7 @@ async def send_gif(body: SendGIFRequest, authorization: str = Header(None)):
 async def create_topic(body: CreateTopicRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
@@ -161,21 +161,21 @@ async def create_topic(body: CreateTopicRequest, authorization: str = Header(Non
 async def edit_topic(topic_id: int, body: EditTopicRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    if topic_id == body.topic_id:
+    if topic_id != body.topic_id:
         raise APIError("topic_id in path and body do not match", "TOPIC_ID_MISMATCH", status_code=400)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 
 @rest_app.delete("/api/v1/topics/{topic_id}", response_model=DeleteTopicRequest)
-async def delete_topic(topic_id: int, body: DeleteMessageRequest, authorization: str = Header(None)):
+async def delete_topic(topic_id: int, body: DeleteTopicRequest, authorization: str = Header(None)):
     await Ut.check_auth(authorization)
 
-    if topic_id == body.topic_id:
+    if topic_id != body.topic_id:
         raise APIError("topic_id in path and body do not match", "TOPIC_ID_MISMATCH", status_code=400)
 
-    result = await KafkaInterface().send_message(payload=body.model_dump())
+    result = await KafkaInterface().send_message(payload=body)
     return await KafkaInterface.response_from_kafka_result(result=result)
 
 

@@ -3,7 +3,7 @@ import asyncio
 from aiohttp import ClientSession
 
 
-async def main():
+async def send_message():
     url = "http://127.0.0.1:8000/api/v1/messages/send"
     headers = {
         "Content-Type": "application/json",
@@ -11,11 +11,8 @@ async def main():
     }
     data = {
         "chat_id": -1003514949333,
-        "text": "message to topic",
-        "topic_id": 2,
-        "parse_mode": "markdown",
-        "disable_notification": False,
-        "reply_to_message_id": None
+        "text": "new message text",
+        "topic_id": 5,
     }
 
     async with ClientSession() as session:
@@ -24,5 +21,127 @@ async def main():
             print(answer)
 
 
+async def edit_message():
+    url = "http://127.0.0.1:8000/api/v1/messages/6/edit"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "message_id": 6,
+        "text": "new edited text"
+    }
+
+    async with ClientSession() as session:
+        async with session.put(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def delete_message():
+    url = "http://127.0.0.1:8000/api/v1/messages/6"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "message_id": 6
+    }
+
+    async with ClientSession() as session:
+        async with session.delete(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def message_pin():
+    url = "http://127.0.0.1:8000/api/v1/messages/7/pin"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "message_id": 7
+    }
+
+    async with ClientSession() as session:
+        async with session.post(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def message_unpin():
+    url = "http://127.0.0.1:8000/api/v1/messages/7/unpin"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "message_id": 7
+    }
+
+    async with ClientSession() as session:
+        async with session.post(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def create_topic():
+    url = "http://127.0.0.1:8000/api/v1/topics/create"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "title": "newtopic2",
+        "icon_color": 0x6FB9F0
+    }
+
+    async with ClientSession() as session:
+        async with session.post(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def edit_topic():
+    url = "http://127.0.0.1:8000/api/v1/topics/10/edit"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "topic_id": 10,
+        "title": "edittopicname"
+    }
+
+    async with ClientSession() as session:
+        async with session.put(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
+async def delete_topic():
+    url = "http://127.0.0.1:8000/api/v1/topics/10"
+    headers = {
+        "Content-Type": "application/json",
+        "authorization": "Bearer 21jk3h12kj3h"
+    }
+    data = {
+        "chat_id": -1003514949333,
+        "topic_id": 10
+    }
+
+    async with ClientSession() as session:
+        async with session.delete(url=url, headers=headers, json=data, timeout=10) as response:
+            answer = await response.text()
+            print(answer)
+
+
 if __name__ == '__main__':
-    asyncio.run(main())
+    asyncio.run(delete_topic())
