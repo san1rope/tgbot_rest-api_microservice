@@ -5,6 +5,7 @@ from typing import Dict
 from http import HTTPStatus
 
 from aiokafka import AIOKafkaProducer
+from aiokafka.errors import KafkaConnectionError
 from fastapi.responses import JSONResponse
 
 from app.api_models import *
@@ -17,7 +18,7 @@ class KafkaInterface:
     PRODUCER: Optional[AIOKafkaProducer] = None
 
     @classmethod
-    async def initialize(cls):
+    async def initialize(cls) -> bool:
         if cls.PRODUCER is None:
             cls.PRODUCER = AIOKafkaProducer(
                 bootstrap_servers=cls.BOOTSTRAP,
@@ -27,7 +28,14 @@ class KafkaInterface:
                 value_serializer=lambda v: json.dumps(v).encode("utf-8"),
                 key_serializer=lambda k: k.encode("utf-8")
             )
-            await cls.PRODUCER.start()
+
+            try:
+                await cls.PRODUCER.start()
+                return True
+
+            except KafkaConnectionError as ex:
+                Config.LOGGER.critical(f"Kafka Connection Error! ex: {ex}")
+                return False
 
     @classmethod
     async def stop(cls):
