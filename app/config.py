@@ -17,6 +17,6 @@ class Config:
     LOGGING_DIR = Path(os.path.abspath("logs"))
     LOGGER: Optional[Logger] = None
 
-    REST_APP: FastAPI = FastAPI()
+    REST_APP: Optional[FastAPI] = None
     REST_API_TOKEN: str = os.getenv("REST_API_TOKEN").strip()
     KAFKA_BOOTSTRAP_IP: str = os.getenv("KAFKA_BOOTSTRAP_IP").strip()
